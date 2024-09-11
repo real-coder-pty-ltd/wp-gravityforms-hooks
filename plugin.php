@@ -30,16 +30,17 @@ add_filter('gform_form_tag', 'add_form_name_data_attr', 10, 2);
 /**
  * Get the gravityform title and add it to the button as a data- tag.
  */
-add_filter( 'gform_submit_button', 'add_form_name_data_attr_to_submit', 10, 2 );
-function add_form_name_data_attr_to_submit( $button, $form ) {
+add_filter('gform_submit_button', 'add_form_name_data_attr_to_submit', 10, 2);
+function add_form_name_data_attr_to_submit($button, $form)
+{
     // Return without changes for the admin back-end.
-    if ( is_admin() ){
+    if (is_admin()) {
         return $button;
     }
     $button = str_replace('>', ' data-form-name="'.sanitize_title($form['title']).'">', $button);
 
     return $button;
-
+}
 
 /**
  * Get the gravityform title and add it to the dataLayer.
@@ -62,7 +63,6 @@ function gravity_form_submission_data_layer(): void
                 });
             });
         }
-
 
         var formObjects = {};
         var forms = document.querySelectorAll('form[id^="gform_"]');
