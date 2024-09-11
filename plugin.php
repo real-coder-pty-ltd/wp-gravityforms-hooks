@@ -28,12 +28,42 @@ function add_form_name_data_attr($form_tag, $form): string
 add_filter('gform_form_tag', 'add_form_name_data_attr', 10, 2);
 
 /**
+ * Get the gravityform title and add it to the button as a data- tag.
+ */
+add_filter( 'gform_submit_button', 'add_form_name_data_attr_to_submit', 10, 2 );
+function add_form_name_data_attr_to_submit( $button, $form ) {
+    // Return without changes for the admin back-end.
+    if ( is_admin() ){
+        return $button;
+    }
+    $button = str_replace('>', ' data-form-name="'.sanitize_title($form['title']).'">', $button);
+
+    return $button;
+
+
+/**
  * Get the gravityform title and add it to the dataLayer.
  */
 function gravity_form_submission_data_layer(): void
 { ?>
     <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
+
+        var buttons = document.querySelectorAll('input.gform_button[type="submit"]');
+
+        if ( buttons) {
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        'event': 'formSubmission',
+                        'formTitle': button.getAttribute('data-form-name') ||'Untitled Form'
+                    });
+                });
+            });
+        }
+
+
         var formObjects = {};
         var forms = document.querySelectorAll('form[id^="gform_"]');
         console.log(forms);
@@ -49,13 +79,27 @@ function gravity_form_submission_data_layer(): void
             if (formObjects[formID]) {
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'event': 'form_submit',
+                    'event': 'formSubmission',
+                    'formID': formID,
                     'formTitle': formObjects[formID].getAttribute('data-form-name') || 'Untitled Form'
                 });
                 console.log(window.dataLayer);
             } else {
                 console.warn('Form with ID ' + formID + ' not found in formObjects.');
             }
+
+            if (formObjects[formID]) {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'event': 'form_submit',
+                    'formID': formID,
+                    'formTitle': formObjects[formID].getAttribute('data-form-name') || 'Untitled Form'
+                });
+                console.log(window.dataLayer);
+            } else {
+                console.warn('Form with ID ' + formID + ' not found in formObjects.');
+            }
+
           });
     });
     </script>
