@@ -2,6 +2,7 @@
     "name": "mattneal/wp-gravityforms-hooks",
     "description": "Hooks and filters for Gravityforms",
     "license": "MIT",
+    "type": "wordpress-muplugin",
     "authors": [
         {
             "name": "Matt Neal",
