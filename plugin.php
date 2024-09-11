@@ -36,11 +36,13 @@ function gravity_form_submission_data_layer(): void
     document.addEventListener("DOMContentLoaded", function() {
         var formObjects = {};
         var forms = document.querySelectorAll('form[id^="gform_"]');
+        console.log(forms);
     
         forms.forEach(function(form) {
             var formID = form.id.split('_')[1];
             formObjects[formID] = form;
         });
+        console.log(formObjects);
     
         jQuery(document).bind("gform_confirmation_loaded", function(event, formID) {
     
@@ -51,6 +53,7 @@ function gravity_form_submission_data_layer(): void
                     'formID': formID,
                     'formTitle': formObjects[formID].getAttribute('data-form-name') || 'Untitled Form'
                 });
+                console.log(window.dataLayer);
             } else {
                 console.warn('Form with ID ' + formID + ' not found in formObjects.');
             }
