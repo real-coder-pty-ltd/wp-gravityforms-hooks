@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: wp-gravityforms-hooks
  * Plugin URI:  https://github.com/real-coder-pty-ltd/wp-gravityforms-hooks
@@ -31,7 +30,7 @@ add_filter('gform_form_tag', 'add_form_name_data_attr', 10, 2);
 /**
  * Get the gravityform title and add it to the dataLayer.
  */
-function gravity_form_submission_data_layer()
+function gravity_form_submission_data_layer(): void
 { ?>
     <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
@@ -60,3 +59,30 @@ function gravity_form_submission_data_layer()
     </script>
     <?php }
 add_action('wp_footer', 'gravity_form_submission_data_layer');
+
+/**
+ * Display zipcode before city in Address Fields
+ *
+ * @link https://docs.gravityforms.com/gform_address_display_format/
+ */
+function strt_address_format()
+{
+    return 'zip_before_city';
+}
+add_filter('gform_address_display_format', 'strt_address_format', 10, 2);
+
+/**
+ * Add a new phone format for Australia.
+ */
+function au_phone_format($phone_formats): array
+{
+    $phone_formats['au'] = [
+        'label' => 'Australia',
+        'mask' => '9999 999 999',
+        'regex' => '/^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{1}(\ |-){0,1}[0-9]{3}$/',
+        'instruction' => 'Australian phone numbers.',
+    ];
+
+    return $phone_formats;
+}
+add_filter('gform_phone_formats', 'au_phone_format');
