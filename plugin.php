@@ -49,6 +49,22 @@ function gravity_form_submission_data_layer(): void
                 });
             });
         }
+
+        jQuery(document).on('gform_page_loaded', function(event, form_id, current_page){
+            var buttons = document.querySelectorAll('input.gform_button[type="submit"]');
+            if ( buttons) {
+                buttons.forEach(function(button) {
+                    button.addEventListener('click', function(event) {
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            'event': 'formSubmission',
+                            'formTitle': button.getAttribute('data-form-name') ||'Untitled Form'
+                        });
+                    });
+                });
+            }
+        });
+
     });
     </script>
     <?php }
