@@ -49,8 +49,7 @@ function gravity_form_submission_data_layer(): void
             if (formObjects[formID]) {
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'event': 'formSubmission',
-                    'formID': formID,
+                    'event': 'form_submit',
                     'formTitle': formObjects[formID].getAttribute('data-form-name') || 'Untitled Form'
                 });
                 console.log(window.dataLayer);
