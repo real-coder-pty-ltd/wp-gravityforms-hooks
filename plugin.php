@@ -3,7 +3,7 @@
  * Plugin Name: wp-gravityforms-hooks
  * Plugin URI:  https://github.com/real-coder-pty-ltd/wp-gravityforms-hooks
  * Description: Hooks and filters for Gravityforms.
- * Version:     1.0.0
+ * Version:     1.0.3
  * Author:      Matthew Neal
  * Author URI:  https://github.com/matt-neal
  */
