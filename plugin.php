@@ -14,20 +14,6 @@ if (! file_exists($composer = __DIR__.'/vendor/autoload.php')) {
 require_once $composer;
 
 /**
- * Get the gravityform title and add it to the form element as a data- tag.
- *
- * @param  string  $form_tag
- * @param  array  $form
- */
-function add_form_name_data_attr($form_tag, $form): string
-{
-    $form_tag = str_replace('>', ' data-form-name="'.sanitize_title($form['title']).'">', $form_tag);
-
-    return $form_tag;
-}
-add_filter('gform_form_tag', 'add_form_name_data_attr', 10, 2);
-
-/**
  * Get the gravityform title and add it to the button as a data- tag.
  */
 add_filter('gform_submit_button', 'add_form_name_data_attr_to_submit', 10, 2);
@@ -43,7 +29,7 @@ function add_form_name_data_attr_to_submit($button, $form)
 }
 
 /**
- * Get the gravityform title and add it to the dataLayer.
+ * Get the gravityform title and add it to the dataLayer for Google Tag Manager.
  */
 function gravity_form_submission_data_layer(): void
 { ?>
@@ -63,44 +49,6 @@ function gravity_form_submission_data_layer(): void
                 });
             });
         }
-
-        var formObjects = {};
-        var forms = document.querySelectorAll('form[id^="gform_"]');
-        console.log(forms);
-    
-        forms.forEach(function(form) {
-            var formID = form.id.split('_')[1];
-            formObjects[formID] = form;
-        });
-        console.log(formObjects);
-    
-        jQuery(document).bind("gform_confirmation_loaded", function(event, formID) {
-    
-            if (formObjects[formID]) {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    'event': 'formSubmission',
-                    'formID': formID,
-                    'formTitle': formObjects[formID].getAttribute('data-form-name') || 'Untitled Form'
-                });
-                console.log(window.dataLayer);
-            } else {
-                console.warn('Form with ID ' + formID + ' not found in formObjects.');
-            }
-
-            if (formObjects[formID]) {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    'event': 'form_submit',
-                    'formID': formID,
-                    'formTitle': formObjects[formID].getAttribute('data-form-name') || 'Untitled Form'
-                });
-                console.log(window.dataLayer);
-            } else {
-                console.warn('Form with ID ' + formID + ' not found in formObjects.');
-            }
-
-          });
     });
     </script>
     <?php }
