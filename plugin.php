@@ -38,9 +38,18 @@ function gravity_form_submission_data_layer(): void
 
         var buttons = document.querySelectorAll('input.gform_button[type="submit"]');
 
+        var formTracked = false;
+
         if ( buttons) {
             buttons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
+                    
+                    button.disabled = true;
+                    if( formTracked ) {
+                        return;
+                    }
+
+
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({
                         'event': 'formSubmission',
@@ -55,6 +64,12 @@ function gravity_form_submission_data_layer(): void
             if ( buttons) {
                 buttons.forEach(function(button) {
                     button.addEventListener('click', function(event) {
+
+                        button.disabled = true;
+                        if( formTracked ) {
+                            return;
+                        }
+
                         window.dataLayer = window.dataLayer || [];
                         window.dataLayer.push({
                             'event': 'formSubmission',
